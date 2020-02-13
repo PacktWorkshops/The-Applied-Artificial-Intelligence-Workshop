@@ -1,1 +1,1 @@
-# Artificial-Intelligence-and-Machine-Learning-Fundamentals
+# The Applied Artificial Intelligence Workshop
