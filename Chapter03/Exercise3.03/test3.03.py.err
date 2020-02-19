@@ -1,0 +1,59 @@
+import unittest
+import import_ipynb
+import pandas as pd
+import numpy as np
+import pandas.testing as pd_testing
+import numpy.testing as np_testing
+
+from sklearn import preprocessing
+from sklearn.model_selection import train_test_split
+from sklearn import svm
+from sklearn.metrics.pairwise import euclidean_distances
+
+
+class Test(unittest.TestCase):
+    def setUp(self):
+        import Exercise3_03
+        self.exercises = Exercise3_03
+
+        self.file_url = 'https://raw.githubusercontent.com/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop/master/Datasets/employees_churned.csv'
+        self.df = pd.read_csv(self.file_url)
+
+        self.scaler = preprocessing.MinMaxScaler(feature_range=(0,1))
+        self.scaled_employees = self.scaler.fit_transform(self.df)
+        self.hours_worked = self.scaled_employees[:, 0]
+        self.salary = self.scaled_employees[:, 1]
+        self.over_two_years = self.scaled_employees[:, 2]
+        self.observation = [0.5, 0.26]
+        self.features = self.scaled_employees[:, :2]
+        self.dist = euclidean_distances([self.observation], self.features)
+
+    def test_df(self):
+        pd_testing.assert_frame_equal(self.exercises.df, self.df)
+
+    def test_file_url(self):
+        self.assertEqual(self.exercises.file_url, self.file_url)
+
+    def test_cat_df(self):
+        pd_testing.assert_frame_equal(self.exercises.cat_df, self.cat_df)
+
+    def test_hours_worked(self):
+        np_testing.assert_array_equal(self.exercises.hours_worked, self.hours_worked)
+
+    def test_salary(self):
+        np_testing.assert_array_equal(self.exercises.salary, self.salary)
+
+    def test_over_two_years(self):
+        np_testing.assert_array_equal(self.exercises.over_two_years, self.over_two_years)
+
+    def test_observation(self):
+        np_testing.assert_array_equal(self.exercises.observation, self.observation)
+
+    def test_features(self):
+        np_testing.assert_array_equal(self.exercises.features, self.features)
+
+    def test_dist(self):
+        self.assertEqual(self.exercises.dist, self.dist)
+
+if __name__ == '__main__':
+    unittest.main()

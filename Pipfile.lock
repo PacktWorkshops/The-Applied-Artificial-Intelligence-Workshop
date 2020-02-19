@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "74a588237dcbfa78c5272d9fe5959b7c91bdde3908b8255dc42533e73f4045f2"
+            "sha256": "da849e4cb5be9c35e5821eb59a7fba785e5cb9aa5516d3ce3baa6ee0b09cc6ff"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -21,7 +21,7 @@
                 "sha256:5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0",
                 "sha256:8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"
             ],
-            "markers": "sys_platform == 'darwin'",
+            "markers": "platform_system == 'Darwin'",
             "version": "==0.1.0"
         },
         "attrs": {
@@ -107,6 +107,13 @@
             ],
             "index": "pypi",
             "version": "==2.9.0"
+        },
+        "import-ipynb": {
+            "hashes": [
+                "sha256:055d7390c26234c6fbbed9a5488840ff06313a084fd3bd83230046d11a670791"
+            ],
+            "index": "pypi",
+            "version": "==0.1.3"
         },
         "importlib-metadata": {
             "hashes": [
@@ -198,10 +205,10 @@
         },
         "jupyter-core": {
             "hashes": [
-                "sha256:185dfe42800585ca860aa47b5fe0211ee2c33246576d2d664b0b0b8d22aacf3a",
-                "sha256:e91785b8bd7f752711c0c20e5ec6ba0d42178d6321a61396082c55818991caee"
+                "sha256:394fd5dd787e7c8861741880bdf8a00ce39f95de5d18e579c74b882522219e7e",
+                "sha256:a4ee613c060fe5697d913416fc9d553599c05e4492d58fac1192c9a6844abb21"
             ],
-            "version": "==4.6.2"
+            "version": "==4.6.3"
         },
         "kiwisolver": {
             "hashes": [
@@ -614,10 +621,10 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:5c56e330306215cd3553342cfafc73dda2c60792384117893f3a83f8a1209f50",
-                "sha256:d65287feb793213ffe11c0f31b81602be31448f38aeb8ffc2eb286c4f6f6657e"
+                "sha256:12248a63bbdf7548f89cb4c7cda4681e537031eda29c02ea29674bc6854460c2",
+                "sha256:7c0f8e91abc0dc07a5068f315c52cb30c66bfbc581e5b50704c8a2f6ebae794a"
             ],
-            "version": "==2.2.0"
+            "version": "==3.0.0"
         }
     },
     "develop": {}
