@@ -42,6 +42,23 @@ class Test(unittest.TestCase):
 				return board[:index] + self.OPPONENT_SIGN + board[index + 1:]
 			return board
 
+		def all_moves_from_board(board, sign):
+			move_list = []
+			for i, v in enumerate(board):
+				if v == self.EMPTY_SIGN:
+					new_board = board[:i] + sign + board[i + 1:]
+					move_list.append(new_board)
+					if game_won_by(new_board) == self.AI_SIGN:
+						return [new_board]
+			return move_list
+
+		def ai_move(board):
+			new_boards = all_moves_from_board(board, self.AI_SIGN)
+			for new_board in new_boards:
+				if game_won_by(new_board) == self.AI_SIGN:
+					return new_board
+			return choice(new_boards)
+
 		def game_won_by(board):
 			for index in self.combo_indices:
 				if board[index[0]] == board[index[1]] == board[index[2]] != self.EMPTY_SIGN:
@@ -95,53 +112,6 @@ class Test(unittest.TestCase):
 			print('Draw', str(len(move_list)))
 			print('Total', str(len(ai_wins) + len(opponent_wins) + len(move_list)))
 			return len(ai_wins), len(opponent_wins), len(move_list), len(ai_wins) + len(opponent_wins) + len(move_list)
-
-		def player_can_win(board, sign):
-			next_moves = all_moves_from_board(board, sign)
-			for next_move in next_moves:
-				if game_won_by(next_move) == sign:
-					return True
-			return False
-
-		def ai_move(board):
-			new_boards = all_moves_from_board(board, self.AI_SIGN)
-			for new_board in new_boards:
-				if game_won_by(new_board) == self.AI_SIGN:
-					return new_board
-			safe_moves = []
-			for new_board in new_boards:
-				if not player_can_win(new_board, self.OPPONENT_SIGN):
-					safe_moves.append(new_board)
-			return choice(safe_moves) if len(safe_moves) > 0 else \
-				new_boards[0]
-
-		def all_moves_from_board(board, sign):
-			if sign == self.AI_SIGN:
-				empty_field_count = board.count(self.EMPTY_SIGN)
-				if empty_field_count == 9:
-					return [sign + self.EMPTY_SIGN * 8]
-				elif empty_field_count == 7:
-					return [
-						board[:8] + sign if board[8] == \
-											self.EMPTY_SIGN else
-						board[:4] + sign + board[5:]
-					]
-			move_list = []
-			for i, v in enumerate(board):
-				if v == self.EMPTY_SIGN:
-					new_board = board[:i] + sign + board[i + 1:]
-					move_list.append(new_board)
-					if game_won_by(new_board) == self.AI_SIGN:
-						return [new_board]
-			if sign == self.AI_SIGN:
-				safe_moves = []
-				for move in move_list:
-					if not player_can_win(move, self.OPPONENT_SIGN):
-						safe_moves.append(move)
-				return safe_moves if len(safe_moves) > 0 else \
-					move_list[0:1]
-			else:
-				return move_list
 
 		self.first_player, self.second_player, self.draw, self.total = count_possibilities()
 

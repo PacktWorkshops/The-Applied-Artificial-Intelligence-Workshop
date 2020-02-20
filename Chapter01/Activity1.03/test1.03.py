@@ -9,8 +9,10 @@ from random import choice
 
 class Test(unittest.TestCase):
 	def setUp(self):
-		import Activity1_02
-		self.exercises = Activity1_02
+		import Activity1_03
+		self.exercises = Activity1_03
+
+		from random import choice
 
 		self.combo_indices = [
 			[0, 1, 2],
@@ -40,16 +42,6 @@ class Test(unittest.TestCase):
 				return board[:index] + self.OPPONENT_SIGN + board[index + 1:]
 			return board
 
-		def all_moves_from_board(board, sign):
-			move_list = []
-			for i, v in enumerate(board):
-				if v == self.EMPTY_SIGN:
-					move_list.append(board[:i] + sign + board[i + 1:])
-			return move_list
-
-		def ai_move(board):
-			return choice(all_moves_from_board(board, self.AI_SIGN))
-
 		def game_won_by(board):
 			for index in self.combo_indices:
 				if board[index[0]] == board[index[1]] == board[index[2]] != self.EMPTY_SIGN:
@@ -67,9 +59,10 @@ class Test(unittest.TestCase):
 					row = int(input('Enter row: '))
 					col = int(input('Enter column: '))
 					board = opponent_move(board, row, col)
-				#print_board(board)
+				print_board(board)
 				is_game_ended = game_won_by(board) != self.EMPTY_SIGN
 				empty_cell_count = sum(1 for cell in board if cell == self.EMPTY_SIGN)
+			print('Game has been ended.')
 
 		def all_moves_from_board_list(board_list, sign):
 			move_list = []
@@ -123,6 +116,16 @@ class Test(unittest.TestCase):
 				new_boards[0]
 
 		def all_moves_from_board(board, sign):
+			if sign == self.AI_SIGN:
+				empty_field_count = board.count(self.EMPTY_SIGN)
+				if empty_field_count == 9:
+					return [sign + self.EMPTY_SIGN * 8]
+				elif empty_field_count == 7:
+					return [
+						board[:8] + sign if board[8] == \
+											self.EMPTY_SIGN else
+						board[:4] + sign + board[5:]
+					]
 			move_list = []
 			for i, v in enumerate(board):
 				if v == self.EMPTY_SIGN:

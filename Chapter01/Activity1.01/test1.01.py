@@ -5,92 +5,141 @@ import numpy as np
 import pandas.testing as pd_testing
 import numpy.testing as np_testing
 
-from sklearn import preprocessing
-from sklearn.model_selection import train_test_split
-from sklearn import neighbors
+from random import choice
 
 class Test(unittest.TestCase):
 	def setUp(self):
-		import Activity3_01
-		self.exercises = Activity3_01
+		import Activity1_01
+		self.exercises = Activity1_01
 
-		self.file_url = 'https://raw.githubusercontent.com/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop/master/Datasets/german_prepared.csv'
-		self.df = pd.read_csv(self.file_url)
+		from random import choice
 
-		self.scaler = preprocessing.MinMaxScaler(feature_range=(0, 1))
-		self.scaled_credit = self.scaler.fit_transform(self.df)
-		self.label = self.scaled_credit[:, 0]
-		self.features = self.scaled_credit[:, 1:]
-		self.features_train, self.features_test, self.label_train, self.label_test = train_test_split(self.features, self.label, test_size=0.2, random_state=7)
+		self.combo_indices = [
+			[0, 1, 2],
+			[3, 4, 5],
+			[6, 7, 8],
+			[0, 3, 6],
+			[1, 4, 7],
+			[2, 5, 8],
+			[0, 4, 8],
+			[2, 4, 6]
+		]
 
-		def fit_knn(k, p, features_train, label_train, features_test, label_test):
-			classifier = neighbors.KNeighborsClassifier(n_neighbors=k, p=p)
-			classifier.fit(features_train, label_train)
-			return classifier.score(features_train, label_train), classifier.score(features_test, label_test)
+		self.EMPTY_SIGN = '.'
+		self.AI_SIGN = 'X'
+		self.OPPONENT_SIGN = 'O'
 
-		self.acc_train_1, self.acc_test_1 = fit_knn(5, 2,    self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_2, self.acc_test_2 = fit_knn(10, 2,   self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_3, self.acc_test_3 = fit_knn(15, 2,   self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_4, self.acc_test_4 = fit_knn(25, 2,   self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_5, self.acc_test_5 = fit_knn(50, 2,   self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_6, self.acc_test_6 = fit_knn(5, 1,    self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_7, self.acc_test_7 = fit_knn(10, 1,   self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_8, self.acc_test_8 = fit_knn(15, 1,   self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_9, self.acc_test_9 = fit_knn(25, 1,   self.features_train, self.label_train, self.features_test, self.label_test)
-		self.acc_train_10, self.acc_test_10 = fit_knn(50, 1, self.features_train, self.label_train, self.features_test, self.label_test)
+		def print_board(board):
+			print(" ")
+			print(' '.join(board[:3]))
+			print(' '.join(board[3:6]))
+			print(' '.join(board[6:]))
+			print(" ")
 
-	def test_features_train(self):
-		np_testing.assert_array_equal(self.exercises.features_train, self.features_train)
+		def opponent_move(board, row, column):
+			index = 3 * (row - 1) + (column - 1)
+			if board[index] == self.EMPTY_SIGN:
+				return board[:index] + self.OPPONENT_SIGN + board[index + 1:]
+			return board
 
-	def test_features_test(self):
-		np_testing.assert_array_equal(self.exercises.features_test, self.features_test)
+		def all_moves_from_board(board, sign):
+			move_list = []
+			for i, v in enumerate(board):
+				if v == self.EMPTY_SIGN:
+					move_list.append(board[:i] + sign + board[i + 1:])
+			return move_list
 
-	def test_label_train(self):
-		np_testing.assert_array_equal(self.exercises.label_train, self.label_train)
+		def ai_move(board):
+			return choice(all_moves_from_board(board, self.AI_SIGN))
 
-	def test_label_test(self):
-		np_testing.assert_array_equal(self.exercises.label_test, self.label_test)
+		def game_won_by(board):
+			for index in self.combo_indices:
+				if board[index[0]] == board[index[1]] == board[index[2]] != self.EMPTY_SIGN:
+					return board[index[0]]
+			return self.EMPTY_SIGN
 
-	def test_acc_1(self):
-		self.assertEqual(self.exercises.acc_train_1, self.acc_train_1)
-		self.assertEqual(self.exercises.acc_test_1, self.acc_test_1)
+		def game_loop():
+			board = self.EMPTY_SIGN * 9
+			empty_cell_count = 9
+			is_game_ended = False
+			while empty_cell_count > 0 and not is_game_ended:
+				if empty_cell_count % 2 == 1:
+					board = ai_move(board)
+				else:
+					row = int(input('Enter row: '))
+					col = int(input('Enter column: '))
+					board = opponent_move(board, row, col)
+				print_board(board)
+				is_game_ended = game_won_by(board) != self.EMPTY_SIGN
+				empty_cell_count = sum(1 for cell in board if cell == self.EMPTY_SIGN)
+			print('Game has been ended.')
 
-	def test_acc_2(self):
-		self.assertEqual(self.exercises.acc_train_2, self.acc_train_2)
-		self.assertEqual(self.exercises.acc_test_2, self.acc_test_2)
+		def all_moves_from_board_list(board_list, sign):
+			move_list = []
+			for board in board_list:
+				move_list.extend(all_moves_from_board(board, sign))
+			return move_list
 
-	def test_acc_3(self):
-		self.assertEqual(self.exercises.acc_train_3, self.acc_train_3)
-		self.assertEqual(self.exercises.acc_test_3, self.acc_test_3)
+		def filter_wins(move_list, ai_wins, opponent_wins):
+			for board in move_list:
+				won_by = game_won_by(board)
+				if won_by == self.AI_SIGN:
+					ai_wins.append(board)
+					move_list.remove(board)
+				elif won_by == self.OPPONENT_SIGN:
+					opponent_wins.append(board)
+					move_list.remove(board)
 
-	def test_acc_4(self):
-		self.assertEqual(self.exercises.acc_train_4, self.acc_train_4)
-		self.assertEqual(self.exercises.acc_test_4, self.acc_test_4)
+		def count_possibilities():
+			board = self.EMPTY_SIGN * 9
+			move_list = [board]
+			ai_wins = []
+			opponent_wins = []
+			for i in range(9):
+				print('step ' + str(i) + '. Moves: ' + str(len(move_list)))
+				sign = self.AI_SIGN if i % 2 == 0 else self.OPPONENT_SIGN
+				move_list = all_moves_from_board_list(move_list, sign)
+				filter_wins(move_list, ai_wins, opponent_wins)
+			print('First player wins: ' + str(len(ai_wins)))
+			print('Second player wins: ' + str(len(opponent_wins)))
+			print('Draw', str(len(move_list)))
+			print('Total', str(len(ai_wins) + len(opponent_wins) + len(move_list)))
+			return len(ai_wins), len(opponent_wins), len(move_list), len(ai_wins) + len(opponent_wins) + len(move_list)
 
-	def test_acc_5(self):
-		self.assertEqual(self.exercises.acc_train_5, self.acc_train_5)
-		self.assertEqual(self.exercises.acc_test_5, self.acc_test_5)
+		self.board = self.EMPTY_SIGN * 9
+		self.all_moves = all_moves_from_board(self.board, self.AI_SIGN)
 
-	def test_acc_6(self):
-		self.assertEqual(self.exercises.acc_train_6, self.acc_train_6)
-		self.assertEqual(self.exercises.acc_test_6, self.acc_test_6)
+		self.first_player, self.second_player, self.draw, self.total = count_possibilities()
 
-	def test_acc_7(self):
-		self.assertEqual(self.exercises.acc_train_7, self.acc_train_7)
-		self.assertEqual(self.exercises.acc_test_7, self.acc_test_7)
+	def test_combo_indices(self):
+		np_testing.assert_array_equal(self.exercises.combo_indices, self.combo_indices)
 
-	def test_acc_8(self):
-		self.assertEqual(self.exercises.acc_train_8, self.acc_train_8)
-		self.assertEqual(self.exercises.acc_test_8, self.acc_test_8)
+	def test_EMPTY_SIGN(self):
+		self.assertEqual(self.exercises.EMPTY_SIGN, self.EMPTY_SIGN)
 
-	def test_acc_9(self):
-		self.assertEqual(self.exercises.acc_train_9, self.acc_train_9)
-		self.assertEqual(self.exercises.acc_test_9, self.acc_test_9)
+	def test_AI_SIGN(self):
+		self.assertEqual(self.exercises.AI_SIGN, self.AI_SIGN)
 
-	def test_acc_10(self):
-		self.assertEqual(self.exercises.acc_train_10, self.acc_train_10)
-		self.assertEqual(self.exercises.acc_test_10, self.acc_test_10)
+	def test_OPPONENT_SIGN(self):
+		self.assertEqual(self.exercises.OPPONENT_SIGN, self.OPPONENT_SIGN)
 
+	def test_board(self):
+		self.assertEqual(self.exercises.board, self.board)
+
+	def test_all_moves(self):
+		self.assertEqual(self.exercises.all_moves, self.all_moves)
+
+	def test_first_player(self):
+		self.assertEqual(self.exercises.first_player, self.first_player)
+
+	def test_second_player(self):
+		self.assertEqual(self.exercises.second_player, self.second_player)
+
+	def test_draw(self):
+		self.assertEqual(self.exercises.draw, self.draw)
+
+	def test_total(self):
+		self.assertEqual(self.exercises.total, self.total)
 
 if __name__ == '__main__':
 	unittest.main()

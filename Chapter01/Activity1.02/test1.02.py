@@ -9,8 +9,8 @@ from random import choice
 
 class Test(unittest.TestCase):
 	def setUp(self):
-		import Activity1_01
-		self.exercises = Activity1_01
+		import Activity1_02
+		self.exercises = Activity1_02
 
 		self.combo_indices = [
 			[0, 1, 2],
@@ -97,6 +97,50 @@ class Test(unittest.TestCase):
 				sign = self.AI_SIGN if i % 2 == 0 else self.OPPONENT_SIGN
 				move_list = all_moves_from_board_list(move_list, sign)
 				filter_wins(move_list, ai_wins, opponent_wins)
+			print('First player wins: ' + str(len(ai_wins)))
+			print('Second player wins: ' + str(len(opponent_wins)))
+			print('Draw', str(len(move_list)))
+			print('Total', str(len(ai_wins) + len(opponent_wins) + len(move_list)))
+			return len(ai_wins), len(opponent_wins), len(move_list), len(ai_wins) + len(opponent_wins) + len(move_list)
+
+		def player_can_win(board, sign):
+			next_moves = all_moves_from_board(board, sign)
+			for next_move in next_moves:
+				if game_won_by(next_move) == sign:
+					return True
+			return False
+
+		def ai_move(board):
+			new_boards = all_moves_from_board(board, self.AI_SIGN)
+			for new_board in new_boards:
+				if game_won_by(new_board) == self.AI_SIGN:
+					return new_board
+			safe_moves = []
+			for new_board in new_boards:
+				if not player_can_win(new_board, self.OPPONENT_SIGN):
+					safe_moves.append(new_board)
+			return choice(safe_moves) if len(safe_moves) > 0 else \
+				new_boards[0]
+
+		def all_moves_from_board(board, sign):
+			move_list = []
+			for i, v in enumerate(board):
+				if v == self.EMPTY_SIGN:
+					new_board = board[:i] + sign + board[i + 1:]
+					move_list.append(new_board)
+					if game_won_by(new_board) == self.AI_SIGN:
+						return [new_board]
+			if sign == self.AI_SIGN:
+				safe_moves = []
+				for move in move_list:
+					if not player_can_win(move, self.OPPONENT_SIGN):
+						safe_moves.append(move)
+				return safe_moves if len(safe_moves) > 0 else \
+					move_list[0:1]
+			else:
+				return move_list
+
+		self.first_player, self.second_player, self.draw, self.total = count_possibilities()
 
 	def test_combo_indices(self):
 		np_testing.assert_array_equal(self.exercises.combo_indices, self.combo_indices)
@@ -109,6 +153,18 @@ class Test(unittest.TestCase):
 
 	def test_OPPONENT_SIGN(self):
 		self.assertEqual(self.exercises.OPPONENT_SIGN, self.OPPONENT_SIGN)
+
+	def test_first_player(self):
+		self.assertEqual(self.exercises.first_player, self.first_player)
+
+	def test_second_player(self):
+		self.assertEqual(self.exercises.second_player, self.second_player)
+
+	def test_draw(self):
+		self.assertEqual(self.exercises.draw, self.draw)
+
+	def test_total(self):
+		self.assertEqual(self.exercises.total, self.total)
 
 if __name__ == '__main__':
 	unittest.main()
