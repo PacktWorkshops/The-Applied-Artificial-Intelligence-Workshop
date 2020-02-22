@@ -21,8 +21,6 @@ class Test(unittest.TestCase):
 		self.H_income = entropy([1 / 7, 2 / 7, 1 / 7, 2 / 7, 1 / 7])
 		self.H_loanType = entropy([3 / 7, 2 / 7, 2 / 7])
 		self.H_LoanAmount = entropy([1 / 7, 1 / 7, 3 / 7, 1 / 7, 1 / 7])
-		self.H_incomeMoreThan75K = entropy([4 / 7, 3 / 7])
-		self.H_loanMoreThan15K = entropy([6 / 7, 1 / 7])
 
 	def test_H_employed(self):
 		self.assertEqual(self.exercises.H_employed, self.H_employed)
@@ -35,12 +33,6 @@ class Test(unittest.TestCase):
 
 	def test_H_LoanAmount(self):
 		self.assertEqual(self.exercises.H_LoanAmount, self.H_LoanAmount)
-
-	def test_H_incomeMoreThan75K(self):
-		self.assertEqual(self.exercises.H_incomeMoreThan75K, self.H_incomeMoreThan75K)
-
-	def test_H_loanMoreThan15K(self):
-		self.assertEqual(self.exercises.H_loanMoreThan15K, self.H_loanMoreThan15K)
 
 
 if __name__ == '__main__':
