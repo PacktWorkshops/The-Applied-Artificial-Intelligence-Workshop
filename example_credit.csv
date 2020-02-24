@@ -1,0 +1,8 @@
+id,Employed,Income,LoanType,LoanAmount,CreditWorthy
+A,false,75000,car,30000,No
+B,false,25000,studies,15000,No
+C,true,125000,car,30000,Yes
+D,true,75000,car,30000,Yes
+E,true,100000,studies,25000,Yes
+F,true,100000,house,125000,Yes
+G,false,80000,house,150000,Yes
