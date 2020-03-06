@@ -1,0 +1,39 @@
+import unittest
+import import_ipynb
+import pandas as pd
+import numpy as np
+import pandas.testing as pd_testing
+import numpy.testing as np_testing
+from sklearn import preprocessing
+from sklearn import model_selection
+
+
+class Test(unittest.TestCase):
+    def setUp(self):
+        import Exercise2_04
+        self.exercises = Exercise2_04
+
+        self.x1 = np.array(range(1, 14))
+        self.y1 = np.array([2, 8, 8, 18, 25, 21, 32, 44, 32, 48, 61, 45, 62])
+        self.x2 = np.array(range(1, 14))
+        self.y2 = np.array([0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144])
+        self.f1 = np.poly1d(np.polyfit(self.x1, self.y1, 1))
+        self.f2 = np.poly1d(np.polyfit(self.x1, self.y1, 2))
+        self.f3 = np.poly1d(np.polyfit(self.x1, self.y1, 3))
+
+    def test_1(self):
+        np_testing.assert_array_equal(self.exercises.x1, self.x1)
+        np_testing.assert_array_equal(self.exercises.y1, self.y1)
+
+    def test_2(self):
+        np_testing.assert_array_equal(self.exercises.x2, self.x2)
+        np_testing.assert_array_equal(self.exercises.y2, self.y2)
+
+    def test_f(self):
+        np_testing.assert_array_equal(self.exercises.f1, self.f1)
+        np_testing.assert_array_equal(self.exercises.f2, self.f2)
+        np_testing.assert_array_equal(self.exercises.f3, self.f3)
+
+
+if __name__ == '__main__':
+    unittest.main()
