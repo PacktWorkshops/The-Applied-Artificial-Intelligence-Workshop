@@ -1,0 +1,75 @@
+import unittest
+import import_ipynb
+import numpy.testing as np_testing
+import pandas as pd
+from sklearn import preprocessing
+from sklearn.cluster import MeanShift
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram
+import scipy.cluster.hierarchy as sch
+from sklearn import metrics
+
+class Test(unittest.TestCase):
+    def setUp(self):
+        import Activity5_02
+        self.exercises = Activity5_02
+
+        self.file_url = 'https://raw.githubusercontent.com/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop/master/Datasets/winequality-red.csv'
+        self.df = pd.read_csv(self.file_url, sep=';')
+        self.features = self.df.drop('quality', 1)
+        self.label = self.df['quality']
+        self.scaled_features = preprocessing.scale(self.features)
+        self.mean_shift_model = MeanShift()
+        self.mean_shift_model.fit(self.scaled_features)
+        self.label_mean_shift = self.mean_shift_model.labels_
+        self.n_cluster_mean_shift = len(self.mean_shift_model.cluster_centers_)
+        self.dendrogram = sch.dendrogram(sch.linkage(self.scaled_features, method='ward'))
+        self.agglomerative_model = AgglomerativeClustering(n_clusters=7, affinity='euclidean', linkage='ward')
+        self.agglomerative_model.fit(self.scaled_features)
+        self.label_agglomerative = self.agglomerative_model.labels_
+        self.ARI_mean = metrics.adjusted_rand_score(self.label, self.label_mean_shift)
+        self.ARI_agg = metrics.adjusted_rand_score(self.label, self.label_agglomerative)
+        self.AMI_mean = metrics.adjusted_mutual_info_score(self.label, self.label_mean_shift)
+        self.AMI_agg = metrics.adjusted_mutual_info_score(self.label, self.label_agglomerative)
+        self.V_mean = metrics.v_measure_score(self.label, self.label_mean_shift, beta=1)
+        self.V_agg = metrics.v_measure_score(self.label, self.label_agglomerative, beta=1)
+        self.FM_mean = metrics.fowlkes_mallows_score(self.label, self.label_mean_shift)
+        self.FM_agg = metrics.fowlkes_mallows_score(self.label, self.label_agglomerative)
+        self.Sil_mean = metrics.silhouette_score(self.scaled_features, self.label_mean_shift)
+        self.Sil_agg = metrics.silhouette_score(self.scaled_features, self.label_agglomerative)
+        self.CH_mean = metrics.calinski_harabasz_score(self.scaled_features, self.label_mean_shift)
+        self.CH_agg = metrics.calinski_harabasz_score(self.scaled_features, self.label_agglomerative)
+        self.DB_mean = metrics.davies_bouldin_score(self.scaled_features, self.label_mean_shift)
+        self.DB_agg = metrics.davies_bouldin_score(self.scaled_features, self.label_agglomerative)
+
+    def test_dataset(self):
+        np_testing.assert_array_equal(self.exercises.df, self.df)
+        np_testing.assert_array_equal(self.exercises.features, self.features)
+        np_testing.assert_array_equal(self.exercises.label, self.label)
+        np_testing.assert_array_equal(self.exercises.scaled_features, self.scaled_features)
+
+    def test_mean_shift(self):
+        np_testing.assert_array_equal(self.exercises.label_mean_shift, self.label_mean_shift)
+        np_testing.assert_array_equal(self.exercises.n_cluster_mean_shift, self.n_cluster_mean_shift)
+
+    def test_agglomerative(self):
+        np_testing.assert_array_equal(self.exercises.label_agglomerative, self.label_agglomerative)
+
+    def test_extrinsic(self):
+        np_testing.assert_array_equal(self.exercises.ARI_mean, self.ARI_mean)
+        np_testing.assert_array_equal(self.exercises.AMI_agg, self.AMI_agg)
+        np_testing.assert_array_equal(self.exercises.V_mean, self.V_mean)
+        np_testing.assert_array_equal(self.exercises.V_agg, self.V_agg)
+        np_testing.assert_array_equal(self.exercises.FM_mean, self.FM_mean)
+        np_testing.assert_array_equal(self.exercises.FM_agg, self.FM_agg)
+
+    def test_intrinsic(self):
+        np_testing.assert_array_equal(self.exercises.Sil_mean, self.Sil_mean)
+        np_testing.assert_array_equal(self.exercises.Sil_agg, self.Sil_agg)
+        np_testing.assert_array_equal(self.exercises.CH_mean, self.CH_mean)
+        np_testing.assert_array_equal(self.exercises.CH_agg, self.CH_agg)
+        np_testing.assert_array_equal(self.exercises.DB_mean, self.DB_mean)
+        np_testing.assert_array_equal(self.exercises.DB_agg, self.DB_agg)
+
+if __name__ == '__main__':
+	unittest.main()
