@@ -1,5 +1,4 @@
 # The Applied Artificial Intelligence Workshop
-# The Applied Artificial Intelligence Workshop
 [![GitHub issues](https://img.shields.io/github/issues/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop.svg)](https://github.com/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop/issues)
 [![GitHub forks](https://img.shields.io/github/forks/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop.svg)](https://github.com/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop/network)
 [![GitHub stars](https://img.shields.io/github/stars/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop.svg)](https://github.com/PacktWorkshops/The-Applied-Artificial-Intelligence-Workshop/stargazers)
