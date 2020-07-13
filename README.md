@@ -7,7 +7,7 @@
 This is the repository for [The Applied Artificial Intelligence Workshop](https://courses.packtpub.com/courses/data-science?utm_source=github&utm_medium=repository&utm_campaign=9781838981266&utm_term=Data%20Science&utm_content=The%20Data%20Science%20Workshop), published by [Packt](https://www.packtpub.com/?utm_source=github). It contains all the supporting project files necessary to work through the course from start to finish.
 
 ## Requirements and Setup
-<a href="https://courses.packtpub.com/courses/data-science?utm_source=github&utm_medium=repository&utm_campaign=9781838981266&utm_term=Data%20Science&utm_content=The%20Data%20Science%20Workshop"><img src="https://github.com/PacktWorkshops/Workshop-Covers/blob/master/B16060_The%20Applied%20Artificial%20Intelligence%20Workshop.png" alt="The Data Science Workshop" height="270px" width="220px" align="right" this.target="_blank"></a>
+<a href="https://courses.packtpub.com/courses/data-science?utm_source=github&utm_medium=repository&utm_campaign=9781838981266&utm_term=Data%20Science&utm_content=The%20Data%20Science%20Workshop"><img src="https://github.com/PacktWorkshops/Workshop-Covers/blob/master/B16060_The%20Applied%20Artificial%20Intelligence%20Workshop.png" alt="The Data Science Workshop" height="280px" width="220px" align="right" this.target="_blank"></a>
 
 To get started with the project files, you'll need to:
 1. Setup [The Jupyter Notebook](https://jupyter.readthedocs.io/en/latest/install.html)
